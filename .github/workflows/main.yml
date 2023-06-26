@@ -18,19 +18,30 @@ jobs:
 #       https://github.com/marketplace/actions/setup-python
         with:
           python-version: 3.11
+      - name: Download Artifacts
+        if: ${{ always() }}
+        uses: actions/download-artifact@v3
+#       https://docs.github.com/en/actions/learn-github-actions/expressions
+        with:
+          name: last-build
+          path: ./artifacts/
+      - name: Display downloaded artifacts
+        run: |
+          mkdir -p ./artifacts
+          ls -R ./artifacts
       - name: Run main build
         run: |
             python build.py
       - name: Build artifacts
         run: |
             mkdir -p ./output
-            echo $GITHUB_RUN_ID > ./output/latest-version.txt
-            echo $GITHUB_SHA > ./output/git-commit.txt
+            echo $GITHUB_RUN_ID > ./artifacts/latest-version.txt
+            echo $GITHUB_SHA > ./artifacts/git-commit.txt
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
 #       https://github.com/actions/upload-artifact
         with:
           name: last-build
           path: |
-            ./output/latest-version.txt
-            ./output/git-commit.txt
+            ./artifacts/latest-version.txt
+            ./artifacts/git-commit.txt
