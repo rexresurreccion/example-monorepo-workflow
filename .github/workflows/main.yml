@@ -15,9 +15,22 @@ jobs:
 #       https://github.com/marketplace/actions/checkout
       - name: Set up Python version
         uses: actions/setup-python@v3
+#       https://github.com/marketplace/actions/setup-python
         with:
           python-version: 3.11
-#         https://github.com/marketplace/actions/setup-python
       - name: Run main build
         run: |
             python build.py
+      - name: Build artifacts
+        run: |
+            mkdir -p ./output
+            echo $GITHUB_RUN_ID > ./output/latest-version.txt
+            echo $GITHUB_SHA > ./output/git-commit.txt
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
+#       https://github.com/actions/upload-artifact
+        with:
+          name: last-build
+          path: |
+            ./output/latest-version.txt
+            ./output/git-commit.txt
