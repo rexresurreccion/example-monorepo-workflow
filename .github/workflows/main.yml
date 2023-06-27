@@ -18,24 +18,24 @@ jobs:
 #       https://github.com/marketplace/actions/setup-python
         with:
           python-version: 3.11
-      - name: Download Artifacts
-        if: ${{ always() }}
-        uses: actions/download-artifact@v3
-#       https://docs.github.com/en/actions/learn-github-actions/expressions
-        with:
-          name: last-build
-          path: ./artifacts/
-      - name: Display downloaded artifacts
-        run: |
-          mkdir -p ./artifacts
-          ls -R ./artifacts
+#       - name: Download Artifacts
+#         if: ${{ always() }}
+#         uses: actions/download-artifact@v3
+# #       https://docs.github.com/en/actions/learn-github-actions/expressions
+#         with:
+#           name: last-build
+#           path: ./artifacts/
+#       - name: Display downloaded artifacts
+#         run: |
+#           mkdir -p ./artifacts
+#           ls -R ./artifacts
       - name: Run main build
         run: |
             python build.py
       - name: Build artifacts
         run: |
             mkdir -p ./output
-            echo $GITHUB_RUN_ID > ./artifacts/latest-version.txt
+            echo $GITHUB_RUN_NUMBER > ./artifacts/latest-version.txt
             echo $GITHUB_SHA > ./artifacts/git-commit.txt
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
@@ -45,3 +45,18 @@ jobs:
           path: |
             ./artifacts/latest-version.txt
             ./artifacts/git-commit.txt
+  
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create Release Assets
+        uses: actions/create-release@v1
+#       https://github.com/marketplace/actions/create-a-release-in-a-github-action
+        env:
+          GITHUB_TOKEN: ${{ secrets.github_token }}
+        with:
+          tag_name: ${{ github.run_number }}
+          release_name: Release Assets ${{ github.run_number }}
+          body: Latest version number and commit sha
+          draft: false
+          prerelease: false
