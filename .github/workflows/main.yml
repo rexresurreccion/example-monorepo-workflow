@@ -9,6 +9,8 @@ jobs:
   build:
 #     https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#choosing-github-hosted-runners
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - name: Check out code base
         uses: actions/checkout@v3
@@ -49,7 +51,7 @@ jobs:
         uses: actions/create-release@v1
   #     https://github.com/marketplace/actions/create-a-release-in-a-github-action
         env:
-          GITHUB_TOKEN: ${{ secrets.github_token }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: ${{ github.run_number }}
           release_name: Release Assets ${{ github.run_number }}
