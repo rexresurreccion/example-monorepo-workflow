@@ -34,7 +34,7 @@ jobs:
             python build.py
       - name: Build artifacts
         run: |
-            mkdir -p ./output
+            mkdir -p ./artifacts
             echo $GITHUB_RUN_NUMBER > ./artifacts/latest-version.txt
             echo $GITHUB_SHA > ./artifacts/git-commit.txt
       - name: Upload artifacts
@@ -45,13 +45,9 @@ jobs:
           path: |
             ./artifacts/latest-version.txt
             ./artifacts/git-commit.txt
-  
-  publish:
-    runs-on: ubuntu-latest
-    steps:
       - name: Create Release Assets
         uses: actions/create-release@v1
-#       https://github.com/marketplace/actions/create-a-release-in-a-github-action
+  #     https://github.com/marketplace/actions/create-a-release-in-a-github-action
         env:
           GITHUB_TOKEN: ${{ secrets.github_token }}
         with:
