@@ -21,7 +21,7 @@ jobs:
 #       - name: Download Artifacts
 #         if: ${{ always() }}
 #         uses: actions/download-artifact@v3
-# #       https://docs.github.com/en/actions/learn-github-actions/expressions
+#         https://docs.github.com/en/actions/learn-github-actions/expressions
 #         with:
 #           name: last-build
 #           path: ./artifacts/
@@ -48,10 +48,13 @@ jobs:
   artifacts:
     runs-on: ubuntu-latest
     permissions:
+#   https://stackoverflow.com/questions/67389957/what-permissions-does-github-token-require-for-releases-from-a-github-action
+#   https://docs.github.com/en/rest/overview/permissions-required-for-github-apps?apiVersion=2022-11-28#repository-permissions-for-contents
       contents: write
     needs: build
     steps:
       - name: Create Release Assets
+        id: create-release-assets
         uses: actions/create-release@v1
 #       https://github.com/marketplace/actions/create-a-release-in-a-github-action
         env:
@@ -62,3 +65,14 @@ jobs:
           body: Latest version number and commit sha
           draft: false
           prerelease: false
+      - name: Upload Release Assets
+        uses: actions/upload-release-asset@v1
+#       https://github.com/marketplace/actions/upload-release-asset
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create-release-assets.output.upload_url }}
+          asset_path: ./artifacts/latest-version.txt
+          asset_name: latest-version.txt
+          asset_content_type: text/plain
+          
