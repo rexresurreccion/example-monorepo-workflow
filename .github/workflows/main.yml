@@ -47,6 +47,8 @@ jobs:
             ./artifacts/git-commit.txt
   artifacts:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     needs: build
     steps:
       - name: Create Release Assets
