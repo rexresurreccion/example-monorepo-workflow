@@ -41,7 +41,7 @@ jobs:
         uses: actions/upload-artifact@v3
 #       https://github.com/actions/upload-artifact
         with:
-          name: last-build
+          name: last-build-artifacts-${{ github.run_number }}.zip
           path: |
             ./artifacts/latest-version.txt
             ./artifacts/git-commit.txt
@@ -65,14 +65,20 @@ jobs:
           body: Latest version number and commit sha
           draft: false
           prerelease: false
-      - name: Upload Release Assets
+      - name: Download latest build artifacts
+        uses: actions/download-artifact@v3
+#       https://github.com/marketplace/actions/download-a-build-artifact
+        with:
+          name: last-build-artifacts-${{ github.run_number }}.zip
+          working-directory: ./artifacts
+      - name: Upload latest build release assets
         uses: actions/upload-release-asset@v1
 #       https://github.com/marketplace/actions/upload-release-asset
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create-release-assets.outputs.upload_url }}
-          asset_path: ./artifacts/latest-version.txt
-          asset_name: latest-version.txt
-          asset_content_type: text/plain
+          asset_path: ./artifacts/last-build-artifacts-${{ github.run_number }}.zip
+          asset_name: last-build-artifacts.zip
+          asset_content_type: application/zip
           
