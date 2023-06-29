@@ -34,17 +34,15 @@ jobs:
             python build.py
       - name: Build artifacts
         run: |
-            mkdir -p ./artifacts
-            echo $GITHUB_RUN_NUMBER > ./artifacts/latest-version.txt
-            echo $GITHUB_SHA > ./artifacts/git-commit.txt
+            echo $GITHUB_RUN_NUMBER > latest-version.txt
+            echo $GITHUB_SHA > git-commit.txt
+            zip -r last-build-artifacts-${{ github.run_number }}.zip latest-version.txt git-commit.txt
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
 #       https://github.com/actions/upload-artifact
         with:
-          name: last-build-artifacts-${{ github.run_number }}
-          path: |
-            ./artifacts/latest-version.txt
-            ./artifacts/git-commit.txt
+          name: last-build-artifacts
+          path: last-build-artifacts-${{ github.run_number }}.zip
   artifacts:
     runs-on: ubuntu-latest
     permissions:
@@ -65,21 +63,21 @@ jobs:
           body: Latest version number and commit sha
           draft: false
           prerelease: false
-      - name: Download latest build artifacts
+      - name: Download last build artifacts
         uses: actions/download-artifact@v3
 #       https://github.com/marketplace/actions/download-a-build-artifact
         with:
-          name: last-build-artifacts-${{ github.run_number }}
-      - name: Display downloaded artifacts
+          name: last-build-artifacts
+      - name: Display downloaded last-build-artifacts
         run: ls
-#       - name: Upload latest build release assets
-#         uses: actions/upload-release-asset@v1
-# #       https://github.com/marketplace/actions/upload-release-asset
-#         env:
-#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#         with:
-#           upload_url: ${{ steps.create-release-assets.outputs.upload_url }}
-#           asset_path: ./artifacts/last-build-artifacts-${{ github.run_number }}.zip
-#           asset_name: last-build-artifacts.zip
-#           asset_content_type: application/zip
+      - name: Upload build artifacts as release assets
+        uses: actions/upload-release-asset@v1
+#       https://github.com/marketplace/actions/upload-release-asset
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create-release-assets.outputs.upload_url }}
+          asset_path: last-build-artifacts-${{ github.run_number }}.zip
+          asset_name: last-build-artifacts.zip
+          asset_content_type: application/zip
           
