@@ -70,11 +70,8 @@ jobs:
 #       https://github.com/marketplace/actions/download-a-build-artifact
         with:
           name: last-build-artifacts-${{ github.run_number }}
-          working-directory: ./artifacts
       - name: Display downloaded artifacts
-        run: |
-          mkdir -p ./artifacts
-          ls -R ./artifacts
+        run: ls
 #       - name: Upload latest build release assets
 #         uses: actions/upload-release-asset@v1
 # #       https://github.com/marketplace/actions/upload-release-asset
