@@ -18,17 +18,22 @@ jobs:
 #       https://github.com/marketplace/actions/setup-python
         with:
           python-version: 3.11
-#       - name: Download Artifacts
-#         if: ${{ always() }}
-#         uses: actions/download-artifact@v3
-#         https://docs.github.com/en/actions/learn-github-actions/expressions
-#         with:
-#           name: last-build
-#           path: ./artifacts/
-#       - name: Display downloaded artifacts
-#         run: |
-#           mkdir -p ./artifacts
-#           ls -R ./artifacts
+      - name: Download Latest Release Assets
+        continue-on-error: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo \
+          -H "Accept: application/vnd.github+json" \
+          -H "Authorization: Bearer $GITHUB_TOKEN"\
+          -H "X-GitHub-Api-Version: 2022-11-28" \
+          $GITHUB_SERVER_URL/repos/$GITHUB_REPOSITORY/releases/latest
+          
+          echo \
+          -H "Accept: application/octet-stream" \
+          -H "Authorization: Bearer $GITHUB_TOKEN"\
+          -H "X-GitHub-Api-Version: 2022-11-28" \
+          $GITHUB_SERVER_URL/repos/$GITHUB_REPOSITORY/releases/assets/ASSET_ID
       - name: Run main build
         run: |
             python build.py
