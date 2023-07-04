@@ -32,7 +32,7 @@ jobs:
             -H "Accept: application/vnd.github+json" \
             -H "Authorization: Bearer $GITHUB_TOKEN"\
             -H "X-GitHub-Api-Version: 2022-11-28" \
-            $GITHUB_SERVER_URL/repos/$GITHUB_REPOSITORY/releases/latest
+            https://api.github.com/repos/$GITHUB_REPOSITORY/releases/latest
           )
           echo $LATEST_RELEASE_ASSET
           echo \
