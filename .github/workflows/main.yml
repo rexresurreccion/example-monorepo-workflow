@@ -40,7 +40,7 @@ jobs:
           -H "Accept: application/octet-stream" \
           -H "Authorization: Bearer $GITHUB_TOKEN"\
           -H "X-GitHub-Api-Version: 2022-11-28" \
-          --output last-build-artifacts.zip
+          -O last-build-artifacts.zip
           "$LATEST_RELEASE_ASSET_URL" \
           
           unzip last-build-artifacts.zip
