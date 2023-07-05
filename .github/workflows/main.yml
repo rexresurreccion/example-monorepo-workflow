@@ -35,13 +35,13 @@ jobs:
             https://api.github.com/repos/$GITHUB_REPOSITORY/releases/latest | \
             python3 -c "import sys, json; asset = [f for f in json.load(sys.stdin)['assets'] if f['name'] == 'last-build-artifacts.zip']; print(asset[0]['url'])"
           )
-          
+          echo $LATEST_RELEASE_ASSET_URL
           curl -L \
           -H "Accept: application/octet-stream" \
           -H "Authorization: Bearer $GITHUB_TOKEN"\
           -H "X-GitHub-Api-Version: 2022-11-28" \
-          "$LATEST_RELEASE_ASSET_URL" \
           --output last-build-artifacts.zip
+          "$LATEST_RELEASE_ASSET_URL" \
           
           unzip last-build-artifacts.zip
           ls
