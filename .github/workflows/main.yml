@@ -30,7 +30,7 @@ jobs:
           curl -LJO# \
           -X GET --url https://api.github.com/repos/rexresurreccion/example-monorepo-workflow/releases/assets/115586480 \
           -H "Accept: application/octet-stream" \
-          -H 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \
+          -H "Authorization: Bearer $GITHUB_TOKEN" \
           -H "X-GitHub-Api-Version: 2022-11-28" \
           -o last-build-artifacts.zip
           ls 
