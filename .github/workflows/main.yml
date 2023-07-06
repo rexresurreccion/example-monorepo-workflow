@@ -28,7 +28,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           curl -L \
-          -H "Accept: application/octet-stream" \
+          -H "Accept: application/vnd.github+json" \
           -H "Authorization: Bearer $GITHUB_TOKEN"\
           -H "X-GitHub-Api-Version: 2022-11-28" \
           -o last-build-artifacts.zip \
