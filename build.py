@@ -28,5 +28,4 @@ for workflow in response.json()["workflows"]:
         },
       )
       response.raise_for_status()
-      print(workflow_response.json())
 
