@@ -25,9 +25,6 @@ for workflow in response.json()["workflows"]:
         url=f"https://api.github.com/repos/{GITHUB_REPOSITORY}/actions/workflows/{workflow['id']}/dispatches",
         json={
           "ref": GITHUB_REF_NAME,
-          "inputs": {
-            "data1": "Hello world",  # This can be an output from previous task
-          },
         },
       )
       response.raise_for_status()
