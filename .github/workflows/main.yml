@@ -9,6 +9,9 @@ jobs:
   build:
 #     https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#choosing-github-hosted-runners
     runs-on: ubuntu-latest
+    permissions:
+#   https://docs.github.com/en/rest/overview/permissions-required-for-github-apps?apiVersion=2022-11-28#repository-permissions-for-actions
+      actions: write
     steps:
       - name: Check out code base
         uses: actions/checkout@v3
@@ -50,6 +53,8 @@ jobs:
           cat git-commit.txt
           cat latest-version.txt
       - name: Run main build
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
             python build.py
       - name: Build artifacts
