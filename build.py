@@ -10,7 +10,7 @@ headers = {
 }
 
 #  https://docs.github.com/en/rest/actions/workflows?apiVersion=2022-11-28#list-repository-workflows
-response = requests.GET(
+response = requests.get(
     headers=headers,
     url=f"https://api.github.com/repos/{GITHUB_REPOSITORY}/actions/workflows",
 )
@@ -19,7 +19,7 @@ print(response.json())
 
 #  https://docs.github.com/en/rest/actions/workflows?apiVersion=2022-11-28#create-a-workflow-dispatch-event
 
-# response = requests.POST(
+# response = requests.post(
 #   headers=headers,
 #   url=f"https://api.github.com/repos/{GITHUB_REPOSITORY}/actions/workflows/WORKFLOW_ID/dispatches",
 #   json={
