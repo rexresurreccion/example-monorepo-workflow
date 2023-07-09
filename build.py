@@ -27,7 +27,7 @@ for workflow in response.json()["workflows"]:
           "ref": GITHUB_REF_NAME,
           "inputs": {
             "data1": "Hello world",  # This can be an output from previous task
-          }.
+          },
         },
       )
       response.raise_for_status()
