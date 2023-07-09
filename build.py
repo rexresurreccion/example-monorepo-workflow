@@ -15,15 +15,17 @@ response = requests.get(
     url=f"https://api.github.com/repos/{GITHUB_REPOSITORY}/actions/workflows",
 )
 response.raise_for_status()
-print(response.json())
-
-#  https://docs.github.com/en/rest/actions/workflows?apiVersion=2022-11-28#create-a-workflow-dispatch-event
-
-# response = requests.post(
-#   headers=headers,
-#   url=f"https://api.github.com/repos/{GITHUB_REPOSITORY}/actions/workflows/WORKFLOW_ID/dispatches",
-#   json={
-#     "data1": "Hello World",  #  This can be an output from a previous task,
-#   },
-# )
+for workflow in response.json()["workflows"]:
+    name = workflow["path"].split("/")[-1]
+    if name.startswith("dispatch"):
+      #  https://docs.github.com/en/rest/actions/workflows?apiVersion=2022-11-28#create-a-workflow-dispatch-event
+      workflow_response = requests.post(
+        headers=headers,
+        url=f"https://api.github.com/repos/{GITHUB_REPOSITORY}/actions/workflows/{workflow['id']}/dispatches",
+        json={
+          "data1": "Hello World",  #  This can be an output from a previous task,
+        },
+      )
+      response.raise_for_status()
+      print(workflow_response.json())
 
